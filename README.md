@@ -5,11 +5,16 @@ One-screen personal page: a chrome blob that reacts to the pointer, built with
 
 ## Publish on GitHub Pages
 
-The built site is already in `docs/`, including the vgpu library (bundled into the JS file).
+A workflow in `.github/workflows/pages.yml` builds the site with Vite (vgpu is bundled in) and deploys it.
+No Jekyll involved.
 
-1. Repo **Settings → Pages**
-2. Source: **Deploy from a branch**, branch `main`, folder `/docs`
-3. Save. The site goes live at `https://<your-user>.github.io/<repo-name>/`
+1. Repo **Settings → Pages → Source: GitHub Actions**
+2. Push to `main`. The workflow runs and the site goes live at `https://<your-user>.github.io/<repo-name>/`
+
+If you replaced an older Jekyll workflow, delete it so only `pages.yml` remains.
+
+Prefer no Actions? The built site is also committed in `docs/`: set Pages to
+**Deploy from a branch, `main`, `/docs`** instead.
 
 ## Change things
 
