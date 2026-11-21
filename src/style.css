@@ -1,0 +1,52 @@
+/* tokens + base */
+:root{--fg:#e9ecf2;--muted:#8d95a6;--line:rgba(255,255,255,.18)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#000;color:var(--fg);font:17px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+#gl{position:fixed;inset:0;width:100%;height:100%;display:block;transition:filter 1s cubic-bezier(.4,0,.2,1)}
+a{color:var(--fg)}
+
+/* layout: name across the blob, contact bottom centre */
+.hero{position:relative;height:100svh;display:grid;grid-template:"who" 1fr "contact" auto / 1fr;padding:32px 28px;text-align:center;pointer-events:none}
+.hero a{pointer-events:auto}
+.who{grid-area:who;align-self:center;justify-self:center}
+.foot{grid-area:contact;justify-self:center}
+h1{margin:0;font-size:clamp(46px,11vw,160px);line-height:.95;letter-spacing:-.04em;font-weight:600;mix-blend-mode:difference}
+.role{margin:14px 0 0;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;font-size:12px}
+ul{list-style:none;margin:0;padding:0;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;font-size:15px}
+.soon{color:var(--muted)}
+
+/* About: a subtitle that opens under the name; the group re-centres, so the name drifts up */
+.subwrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows 1.1s cubic-bezier(.16,1,.3,1)}
+.sub{margin:0 auto;min-height:0;overflow:hidden;max-width:540px;font-size:clamp(16px,1.7vw,21px);line-height:1.45;opacity:0;transform:translateY(10px);
+  text-shadow:0 0 14px rgba(0,0,0,.95),0 0 4px rgba(0,0,0,.8);
+  transition:opacity .9s cubic-bezier(.4,0,.2,1),transform 1.1s cubic-bezier(.16,1,.3,1)}
+.bio-on .subwrap{grid-template-rows:1fr}
+.bio-on .sub{opacity:1;transform:none;padding:18px 0 8px;transition-delay:.15s}
+
+/* dim the scene while About is showing, so only the text, name and contact stand out */
+.bio-on #gl{filter:brightness(.22) saturate(.7)}
+
+/* contact buttons: dark chrome with a specular highlight, no outline.
+   Motion (highlight follow + spring squash) lives in site.ts. */
+.pill{position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:999px;text-decoration:none;letter-spacing:.02em;
+  border:0;
+  background:linear-gradient(180deg,rgba(60,64,72,.85) 0%,rgba(22,24,28,.92) 48%,rgba(10,11,13,.95) 52%,rgba(44,42,40,.9) 100%);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 6px 24px rgba(0,0,0,.45);
+  transition:box-shadow .5s}
+.pill::before{content:"";position:absolute;z-index:-1;left:calc(var(--hx,20px) - 28px);top:calc(var(--hy,10px) - 11px);width:56px;height:22px;border-radius:50%;
+  background:radial-gradient(ellipse at center,rgba(255,255,255,.95),rgba(255,255,255,0) 70%);filter:blur(1.5px);opacity:.5;pointer-events:none;transition:opacity .4s}
+.pill::after{content:"\2197";font-size:13px;opacity:.6;transition:transform .35s cubic-bezier(.16,1,.3,1),opacity .35s}
+.pill:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 10px 34px rgba(0,0,0,.6)}
+.pill:hover::before{opacity:.85}
+.pill:hover::after{transform:translate(2px,-2px);opacity:1}
+.pill:focus-visible{outline:2px solid #fff;outline-offset:3px}
+
+/* no WebGPU */
+.fallback{display:none;position:fixed;top:12px;width:100%;text-align:center;margin:0;color:var(--muted);font-size:12px;pointer-events:none}
+html[data-gpu="off"] .fallback{display:block}
+html[data-gpu="off"] body{background:radial-gradient(40% 40% at 50% 45%,#2a2d33,#000 70%)}
+
+@media (prefers-reduced-motion:reduce){
+  #gl,.subwrap,.sub,.pill,.pill::before,.pill::after{transition:none}
+}
